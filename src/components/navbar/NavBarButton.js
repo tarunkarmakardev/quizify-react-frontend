@@ -8,7 +8,7 @@ export default class NavBarButton extends Component {
       <li className="nav-item ms-lg-2">
         <Link
           to={to}
-          className={`btn btn-${type || "danger"}`}
+          className={`btn btn-${type || "danger"} mt-2 mt-lg-0`}
           onClick={onClick}
         >
           {name}

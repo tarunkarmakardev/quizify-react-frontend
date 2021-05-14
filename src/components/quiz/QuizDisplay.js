@@ -9,9 +9,7 @@ import LoaderFullScreen from "../loader/LoaderFullScreen";
 export default class QuizDisplay extends Component {
   componentDidMount = () => {
     const {
-      // Actions to perform
       fetchAllQuizDetail,
-      // quizId and quesNum from URL
       match: {
         params: { quizId, quesNum },
       },
@@ -22,9 +20,7 @@ export default class QuizDisplay extends Component {
 
   componentDidUpdate(prevProps) {
     const {
-      // Actions to perform
       fetchAllQuizDetail,
-      // quizId and quesNum from URL
       match: {
         params: { quizId, quesNum },
       },
@@ -133,10 +129,10 @@ export default class QuizDisplay extends Component {
 
   renderQuizForm = ({
     button,
-    disableChoices,
-    alert,
-    selectedAnswerVal,
-    correctAnswerVal,
+    disableChoices = false,
+    alert = null,
+    selectedAnswerVal = null,
+    correctAnswerVal = null,
   }) => {
     const {
       questionData: { id: quesId, question },
@@ -184,6 +180,7 @@ export default class QuizDisplay extends Component {
       answerListStatus,
       attemptStatusData,
       attemptQuestionStatus,
+      attemptData,
     } = this.props;
 
     const allQuizDetailFetched =
@@ -224,7 +221,7 @@ export default class QuizDisplay extends Component {
       const {
         selected_answer_id: selectedAnswerVal,
         correct_answer_id: correctAnswerVal,
-      } = attemptStatusData;
+      } = attemptData;
       return (
         <>
           {this.renderQuizInfo()}

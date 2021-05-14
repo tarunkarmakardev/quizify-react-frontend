@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Field, reduxForm } from "redux-form";
+import { Field, reduxForm, SubmissionError } from "redux-form";
+import ReactHtmlParser from "react-html-parser";
 
 class QuizQuestionForm extends Component {
   renderRadioInput = (values) => {
@@ -11,8 +12,6 @@ class QuizQuestionForm extends Component {
       selectedAnswerVal,
       correctAnswerVal,
       checked,
-
-      meta: { error, touched },
     } = values;
 
     let badge;
@@ -45,25 +44,23 @@ class QuizQuestionForm extends Component {
             disabled={disableChoices}
             checked={selectedAnswerVal === input.value || checked}
           />
-          <label className="form-check-label">{label}</label>
+          <label className="form-check-label">{ReactHtmlParser(label)}</label>
           {badge}
         </div>
-        {touched && error ? (
-          <div
-            className="invalid-feedback mt-2 mb-3"
-            style={{ display: "block" }}
-          >
-            Select an option
-          </div>
-        ) : null}
       </>
     );
   };
   onFormSubmission = (values) => {
     // console.log(values);
-    this.props.onFormSubmit(values);
+    if (!values.selected_answer) {
+      console.log("Select an option");
+      throw new SubmissionError({
+        _error: "Select an option",
+      });
+    } else {
+      this.props.onFormSubmit(values);
+    }
   };
-  rquired = (value) => (value ? undefined : "Enter a value");
   render() {
     const {
       quesNum,
@@ -76,13 +73,14 @@ class QuizQuestionForm extends Component {
       disableChoices,
       selectedAnswerVal,
       correctAnswerVal,
+      error,
     } = this.props;
     // console.log(this.props);
     return (
       <div className="container mt-2 border shadow py-3">
         <div className="border-bottom py-2">
           <h5>
-            Q.{quesNum} {questionText}
+            Q.{quesNum} {ReactHtmlParser(questionText)}
           </h5>
         </div>
         <div className="mt-2 p-2">
@@ -99,10 +97,17 @@ class QuizQuestionForm extends Component {
                   disableChoices={disableChoices}
                   selectedAnswerVal={selectedAnswerVal}
                   correctAnswerVal={correctAnswerVal}
-                  validate={this.rquired}
                 />
               );
             })}
+            {error && (
+              <div
+                className="invalid-feedback mt-2 mb-3"
+                style={{ display: "block" }}
+              >
+                Please select an option
+              </div>
+            )}
             <div className="mt-2 py-2">{button}</div>
           </form>
         </div>

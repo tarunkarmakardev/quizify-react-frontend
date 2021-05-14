@@ -37,6 +37,7 @@ const mapStateToProps = ({
   attemptQuestionState: {
     status: attemptQuestionStatus,
     loading: attemptingQuiz,
+    data: attemptData,
   },
 }) => {
   return {
@@ -64,6 +65,7 @@ const mapStateToProps = ({
     attemptStatusStatus,
     // attemptQuestionState
     attemptQuestionStatus,
+    attemptData,
   };
 };
 
